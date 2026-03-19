@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: rails-doctor
+    runtime: node
+    nodeVersion: 20.18.0
+    buildCommand: npm ci && npm run build && cp -r .next/static .next/standalone/.next/static && cp -r public .next/standalone/public
+    startCommand: node .next/standalone/server.js
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: HOSTNAME
+        value: 0.0.0.0
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_LOGIN
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
