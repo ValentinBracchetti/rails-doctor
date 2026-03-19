@@ -4,6 +4,14 @@ import { getTokenFromRequest } from "./lib/auth";
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  if (pathname === "/") {
+    const session = await getTokenFromRequest(req);
+    if (session) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
   if (pathname.startsWith("/dashboard")) {
     const session = await getTokenFromRequest(req);
     if (!session) {
@@ -24,5 +32,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: ["/", "/dashboard/:path*", "/login"],
 };
