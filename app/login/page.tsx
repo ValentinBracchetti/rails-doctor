@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Lock, User, ArrowRight, Stethoscope } from "lucide-react";
@@ -93,13 +93,43 @@ function LoginForm() {
   );
 }
 
-export default function LoginPage() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+function LoginFormFallback() {
+  return (
+    <form className="space-y-4">
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sm font-medium text-white/70">Identifiant</label>
+        <input
+          type="text"
+          placeholder="admin"
+          autoComplete="username"
+          required
+          className="w-full glass rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/30 border border-white/10 focus:border-violet-500/50 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all duration-200 bg-white/3"
+        />
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sm font-medium text-white/70">Mot de passe</label>
+        <input
+          type="password"
+          placeholder="••••••••"
+          autoComplete="current-password"
+          required
+          className="w-full glass rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/30 border border-white/10 focus:border-violet-500/50 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all duration-200 bg-white/3"
+        />
+      </div>
+      <button
+        type="submit"
+        className="w-full mt-2 inline-flex items-center justify-center font-medium transition-all duration-200 bg-gradient-to-r from-violet-600 to-blue-600 text-white shadow-lg shadow-violet-500/25 px-7 py-3.5 text-base rounded-xl gap-2.5 cursor-pointer"
+      >
+        Accéder au rapport
+        <ArrowRight className="w-4 h-4" />
+      </button>
+    </form>
+  );
+}
 
+export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Background gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
           className="animate-mesh-1 absolute -top-40 -left-40 w-96 h-96 rounded-full opacity-20"
@@ -123,7 +153,6 @@ export default function LoginPage() {
       </div>
 
       <div className="relative z-10 w-full max-w-md mx-auto px-4">
-        {/* Back link */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -133,11 +162,10 @@ export default function LoginPage() {
             href="/"
             className="text-sm text-white/40 hover:text-white/70 transition-colors"
           >
-            ← Retour à l&apos;accueil
+            &larr; Retour &agrave; l&apos;accueil
           </Link>
         </motion.div>
 
-        {/* Card */}
         <motion.div
           initial={{ opacity: 0, y: 24, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -147,7 +175,6 @@ export default function LoginPage() {
             boxShadow: "0 0 80px rgba(124,58,237,0.15), 0 0 0 1px rgba(255,255,255,0.06)",
           }}
         >
-          {/* Logo */}
           <div className="text-center mb-8">
             <motion.div
               initial={{ scale: 0 }}
@@ -175,15 +202,13 @@ export default function LoginPage() {
               transition={{ delay: 0.3 }}
               className="text-sm text-white/40"
             >
-              Accès sécurisé au rapport de diagnostic
+              Acc&egrave;s s&eacute;curis&eacute; au rapport de diagnostic
             </motion.p>
           </div>
 
-          {mounted && (
-            <Suspense fallback={null}>
-              <LoginForm />
-            </Suspense>
-          )}
+          <Suspense fallback={<LoginFormFallback />}>
+            <LoginForm />
+          </Suspense>
         </motion.div>
 
         <motion.p
@@ -192,7 +217,7 @@ export default function LoginPage() {
           transition={{ delay: 0.6 }}
           className="text-center text-xs text-white/20 mt-6"
         >
-          Rapport confidentiel — accès réservé
+          Rapport confidentiel &mdash; acc&egrave;s r&eacute;serv&eacute;
         </motion.p>
       </div>
     </div>
